@@ -55,7 +55,7 @@ void setup() {
   pinMode(5,INPUT);             //definimos como pin de entrada señal SCL
   pinMode(4,INPUT);             //definimos como pin de entrada señal SDA
 
-  Serial.begin(9600);           // puerto de comunicación serial
+  Serial.begin(115200);           // puerto de comunicación serial
   dht.setup(D5, DHTesp::DHT11); //llamado de la librería que se comunica con el sensor
 
   if(bmp180.begin())
