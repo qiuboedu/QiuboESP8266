@@ -2,10 +2,15 @@
 
 #include "QiuboESP8266.h"
 
-/************************* Adafruit.io Setup *********************************/
+/*** Datos de Conexión WiFi ***/
+
+#define WIFI_SSID     "<SSID>"        // Reemplaza por el nombre de tu red
+#define WIFI_PASSWORD "<PASSWORD>"    // Reemplaza por la contraseña de tu red
+
+/************************* Adafruit.io Configuración *********************************/
 
 #define AIO_SERVER      "io.adafruit.com"      // io.adafruit.com
-#define AIO_SERVERPORT  1883                   // use 8883 for SSL
+#define AIO_SERVERPORT  1883                   // usar 8883 para SSL
 #define AIO_USERNAME    "<username>"           // Usuario de Adafruit
 #define AIO_KEY         "<API KEY>"            // API Key de Adafruit
 
@@ -109,7 +114,7 @@ void setup() {
   pinMode(amarillo2, OUTPUT);
   pinMode(verde2, OUTPUT);
 
-  qiubo.connectToWiFi("<SSID>", "<PASSWORD>");
+  qiubo.connectToWiFi(WIFI_SSID, WIFI_PASSWORD);
 }
 
 void loop() {

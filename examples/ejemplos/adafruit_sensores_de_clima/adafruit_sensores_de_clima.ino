@@ -1,40 +1,53 @@
-  /*** Librerías ***/
+/*** Librerías ***/
 
-  #include <DHTesp.h>
-  #include <SFE_BMP180.h>
-  #include <Wire.h>
-  #include "QiuboESP8266.h"
+#include <DHTesp.h>
+#include <SFE_BMP180.h>
+#include <Wire.h>
+#include "QiuboESP8266.h"
 
-  /*** Sensores ***/
+/*** Datos de Conexión WiFi ***/
 
-  DHTesp dht;         // creamos una variable donde guardamos el pin(señal digital) y el modelo del sensor
-  SFE_BMP180 bmp180;  // Creación de un objeto
+#define WIFI_SSID     "<SSID>"        // Reemplaza por el nombre de tu red
+#define WIFI_PASSWORD "<PASSWORD>"    // Reemplaza por la contraseña de tu red
 
-  /*** Constantes ***/
+/*** Sensores ***/
 
-  const int PIN_LLUVIA                  = 4;
-  const double PRESION_AL_NIVEL_DEL_MAR = 1013.25; //presión real al nivel del mar en mbar
+DHTesp dht;         // creamos una variable donde guardamos el pin(señal digital) y el modelo del sensor
+SFE_BMP180 bmp180;  // Creación de un objeto
 
-  /*** Variables Globales ***/
+/*** Constantes ***/
 
-  QiuboESP8266 qiubo;
+const int PIN_LLUVIA                  = 4;
+const double PRESION_AL_NIVEL_DEL_MAR = 1013.25; //presión real al nivel del mar en mbar
+
+/*** Variables Globales ***/
+
+QiuboESP8266 qiubo;
 
 /************************* Adafruit.io Setup *********************************/
 
 #define AIO_SERVER      "io.adafruit.com"      // io.adafruit.com
-#define AIO_SERVERPORT  1883                   // use 8883 for SSL
+#define AIO_SERVERPORT  1883                   // usar 8883 para SSL
 #define AIO_USERNAME    "<username>"           // Usuario de Adafruit
 #define AIO_KEY         "<API KEY>"            // API Key de Adafruit
+#define FEED_PATH       AIO_USERNAME "/feeds/"
+
+/** Identificador del Feed donde vamos a publicar **/
+
+#define FEED_1 FEED_PATH "presion"
+#define FEED_2 FEED_PATH "humedad"
+#define FEED_3 FEED_PATH "temperatura"
+#define FEED_4 FEED_PATH "lluvia"
 
 WiFiClient client;
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_USERNAME, AIO_KEY);
 
 /****************************** Feeds ***************************************/
 
-Adafruit_MQTT_Publish publisherPresion = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/presion");
-Adafruit_MQTT_Publish publisherHumedad = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/humedad");
-Adafruit_MQTT_Publish publisherTemperatura = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/temperatura");
-Adafruit_MQTT_Publish publisherLluvia = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/lluvia");
+Adafruit_MQTT_Publish publisherPresion = Adafruit_MQTT_Publish(&mqtt, FEED_1);
+Adafruit_MQTT_Publish publisherHumedad = Adafruit_MQTT_Publish(&mqtt, FEED_2);
+Adafruit_MQTT_Publish publisherTemperatura = Adafruit_MQTT_Publish(&mqtt, FEED_3);
+Adafruit_MQTT_Publish publisherLluvia = Adafruit_MQTT_Publish(&mqtt, FEED_4);
 
 void setup() {
 
@@ -50,7 +63,7 @@ void setup() {
 
    /** Indica el nombre de red y la contraseña **/
 
-  qiubo.connectToWiFi("<SSID>", "<PASSWORD>");
+  qiubo.connectToWiFi(WIFI_SSID, WIFI_PASSWORD);
 }
 
 
