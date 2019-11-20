@@ -16,8 +16,13 @@ void QiuboESP8266::println(String message)
 void QiuboESP8266::connectToWiFi(String ssid, String password)
 {
   // Conexión WIFI
+  /* Explicitly set the ESP8266 to be a WiFi-client, otherwise, it by default,
+     would try to act as both a client and an access-point and could cause
+     network-issues with your other WiFi-devices on your WiFi-network. */
+  WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   int contconexion = 0;
+
   while (WiFi.status() != WL_CONNECTED and contconexion < 50) { //Cuenta hasta 50 si no se puede conectar lo cancela
     ++contconexion;
     delay(500);
